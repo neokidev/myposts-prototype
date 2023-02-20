@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import UserProfile from "../components/UserProfile.astro";
+import PostCard from "../components/PostCard.astro";
 
 const posts = [
   { index: 1 },
@@ -26,6 +27,8 @@ const posts = [
         <div
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-5 place-items-center"
         >
+          <PostCard />
+
           {
             posts.map((post) => (
               <div class="bg-green-100 text-green-500 text-lg font-bold text-center rounded-lg w-72 h-80 flex items-center justify-center">
