@@ -2,20 +2,73 @@
 import Layout from "../layouts/Layout.astro";
 import UserProfile from "../components/UserProfile.astro";
 import PostCard from "../components/PostCard.astro";
+import { faker } from "@faker-js/faker";
+import lodash from "lodash";
+const { sampleSize } = lodash;
+
+const tags = faker.lorem.words(10).split(" ");
 
 const posts = [
-  { index: 1 },
-  { index: 2 },
-  { index: 3 },
-  { index: 4 },
-  { index: 5 },
-  { index: 6 },
-  { index: 7 },
-  { index: 8 },
-  { index: 9 },
-  { index: 10 },
-  { index: 11 },
-  { index: 12 },
+  {
+    title: faker.lorem.sentence(),
+    body: faker.lorem.paragraphs(3),
+    tags: sampleSize(tags, 2),
+  },
+  {
+    title: faker.lorem.sentence(),
+    body: faker.lorem.paragraphs(3),
+    tags: sampleSize(tags, 3),
+  },
+  {
+    title: faker.lorem.sentence(),
+    body: faker.lorem.paragraphs(3),
+    tags: sampleSize(tags, 1),
+  },
+  {
+    title: faker.lorem.sentence(),
+    body: faker.lorem.paragraphs(3),
+    tags: sampleSize(tags, 3),
+  },
+  {
+    title: faker.lorem.sentence(),
+    body: faker.lorem.paragraphs(3),
+    tags: sampleSize(tags, 5),
+  },
+  {
+    title: faker.lorem.sentence(),
+    body: faker.lorem.paragraphs(3),
+    tags: sampleSize(tags, 2),
+  },
+  {
+    title: faker.lorem.sentence(),
+    body: faker.lorem.paragraphs(3),
+    tags: sampleSize(tags, 4),
+  },
+  {
+    title: faker.lorem.sentence(),
+    body: faker.lorem.paragraphs(3),
+    tags: sampleSize(tags, 3),
+  },
+  {
+    title: faker.lorem.sentence(),
+    body: faker.lorem.paragraphs(3),
+    tags: sampleSize(tags, 1),
+  },
+  {
+    title: faker.lorem.sentence(),
+    body: faker.lorem.paragraphs(3),
+    tags: sampleSize(tags, 2),
+  },
+  {
+    title: faker.lorem.sentence(),
+    body: faker.lorem.paragraphs(3),
+    tags: sampleSize(tags, 5),
+  },
+  {
+    title: faker.lorem.sentence(),
+    body: faker.lorem.paragraphs(3),
+    tags: sampleSize(tags, 2),
+  },
 ];
 ---
 
@@ -27,13 +80,12 @@ const posts = [
         <div
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-5 place-items-center"
         >
-          <PostCard />
-
           {
-            posts.map((post) => (
-              <div class="bg-green-100 text-green-500 text-lg font-bold text-center rounded-lg w-72 h-80 flex items-center justify-center">
-                {post.index}
-              </div>
+            posts.map(({ title, body, tags }) => (
+              <PostCard title={title} body={body} tags={tags} />
+              // <div class="bg-green-100 text-green-500 text-lg font-bold text-center rounded-lg w-72 h-80 flex items-center justify-center">
+              //   {post.index}
+              // </div>
             ))
           }
         </div>

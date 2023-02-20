@@ -11,7 +11,12 @@
   },
   "dependencies": {
     "@astrojs/tailwind": "^3.0.1",
+    "@types/lodash": "^4.14.191",
     "astro": "^2.0.14",
+    "lodash": "^4.17.21",
     "tailwindcss": "^3.0.24"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^7.6.0"
   }
 }
