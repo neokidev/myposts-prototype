@@ -1,95 +1,69 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import UserProfile from "../components/UserProfile.astro";
-import PostCard from "../components/PostCard.astro";
-import { faker } from "@faker-js/faker";
-import lodash from "lodash";
-const { sampleSize } = lodash;
+import { readAll } from "../lib/markdoc/read";
+import { blog } from "../lib/markdoc/frontmatter.schema";
+import PageLayout from "../layouts/PageLayout.astro";
+import PageMeta from "../components/PageMeta.astro";
+import { SITE_TITLE } from "../config";
 
-const tags = faker.lorem.words(10).split(" ");
+const posts = await readAll({
+  directory: "blog",
+  frontmatterSchema: blog,
+});
 
-const posts = [
-  {
-    title: faker.lorem.sentence(),
-    body: faker.lorem.paragraphs(3),
-    tags: sampleSize(tags, 2),
-  },
-  {
-    title: faker.lorem.sentence(),
-    body: faker.lorem.paragraphs(3),
-    tags: sampleSize(tags, 3),
-  },
-  {
-    title: faker.lorem.sentence(),
-    body: faker.lorem.paragraphs(3),
-    tags: sampleSize(tags, 1),
-  },
-  {
-    title: faker.lorem.sentence(),
-    body: faker.lorem.paragraphs(3),
-    tags: sampleSize(tags, 3),
-  },
-  {
-    title: faker.lorem.sentence(),
-    body: faker.lorem.paragraphs(3),
-    tags: sampleSize(tags, 5),
-  },
-  {
-    title: faker.lorem.sentence(),
-    body: faker.lorem.paragraphs(3),
-    tags: sampleSize(tags, 2),
-  },
-  {
-    title: faker.lorem.sentence(),
-    body: faker.lorem.paragraphs(3),
-    tags: sampleSize(tags, 4),
-  },
-  {
-    title: faker.lorem.sentence(),
-    body: faker.lorem.paragraphs(3),
-    tags: sampleSize(tags, 3),
-  },
-  {
-    title: faker.lorem.sentence(),
-    body: faker.lorem.paragraphs(3),
-    tags: sampleSize(tags, 1),
-  },
-  {
-    title: faker.lorem.sentence(),
-    body: faker.lorem.paragraphs(3),
-    tags: sampleSize(tags, 2),
-  },
-  {
-    title: faker.lorem.sentence(),
-    body: faker.lorem.paragraphs(3),
-    tags: sampleSize(tags, 5),
-  },
-  {
-    title: faker.lorem.sentence(),
-    body: faker.lorem.paragraphs(3),
-    tags: sampleSize(tags, 2),
-  },
-];
+const sortedPosts = posts
+  .filter((p) => p.frontmatter.draft !== true)
+  .sort(
+    (a, b) =>
+      new Date(b.frontmatter.date).valueOf() -
+      new Date(a.frontmatter.date).valueOf()
+  );
 ---
 
-<Layout title="Welcome to Astro.">
-  <main>
-    <UserProfile />
-    <div class="flex justify-center">
-      <div class="max-w-7xl">
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-5 place-items-center"
-        >
-          {
-            posts.map(({ title, body, tags }) => (
-              <PostCard title={title} body={body} tags={tags} />
-              // <div class="bg-green-100 text-green-500 text-lg font-bold text-center rounded-lg w-72 h-80 flex items-center justify-center">
-              //   {post.index}
-              // </div>
-            ))
-          }
-        </div>
-      </div>
-    </div>
-  </main>
-</Layout>
+<PageLayout>
+  <PageMeta title={`Blog | ${SITE_TITLE}`} slot="meta" />
+  <section slot="main">
+    <ul>
+      {
+        sortedPosts.map((post) => {
+          const formattedDate = new Date(
+            post.frontmatter.date
+          ).toLocaleDateString("en-us", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+          return (
+            <li class="grid grid-cols-[1fr] md:grid-cols-[1fr_auto] mb-3 md:gap-2 items-start">
+              <div class="title">
+                {post.frontmatter.external ? (
+                  <a
+                    href={post.frontmatter.url}
+                    target="_blank"
+                    class="unset hover:text-text-link"
+                  >
+                    <span>{post.frontmatter.title}</span>
+                    <span>
+                      <i class="ml-1 mr-1 text-[12px] pb-2 fa-solid fa-up-right-from-square pt-1" />
+                    </span>
+                  </a>
+                ) : (
+                  <a
+                    href={`/blog/${post.slug}`}
+                    class="unset hover:text-text-link"
+                  >
+                    {post.frontmatter.title}
+                  </a>
+                )}
+              </div>
+              <div class="text-text-muted text-sm italic">
+                <time datetime={post.frontmatter.date.toISOString()}>
+                  {formattedDate}
+                </time>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </section>
+</PageLayout>
