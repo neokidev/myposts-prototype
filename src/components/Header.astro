@@ -1,9 +1,35 @@
 ---
+import DarkModeToggle from "./DarkModeToggle.astro";
 import Logo from "./Logo.astro";
 ---
 
-<header
-  class="h-16 bg-[#0D021E] border-b border-[#2D223E] flex justify-center items-center"
->
-  <Logo />
+<header class="h-16 border-b border-white/20">
+  <div class="flex justify-center items-center px-6 sm:px-8">
+    <div class="w-full max-w-5xl flex justify-center items-center relative">
+      <Logo />
+      <a
+        class="unset text-xl ml-4 hover:text-text-link absolute right-0"
+        href="https://github.com/ot07/myposts"
+        target="_blank"
+      >
+        <i
+          class="fa-brands fa-github"
+          aria-hidden="true"
+          title="Myposts on GitHub"></i>
+        <span class="fa-sr-only">Blogster on GitHub</span>
+      </a>
+      <!-- <DarkModeToggle /> -->
+    </div>
+  </div>
 </header>
+<style>
+  header {
+    grid-area: header;
+    display: grid;
+    align-items: center;
+    grid-template-columns: minmax(0, 1fr) minmax(0, max-content) minmax(
+        0,
+        max-content
+      );
+  }
+</style>
