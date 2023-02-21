@@ -1,0 +1,15 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PostRenderer from "../components/PostRenderer.astro";
+import { readPost } from '../lib/post';
+
+const { content } = await readPost("./src/content/markdown-style-guide.md")
+---
+
+<Layout title="Welcome to Astro.">
+  <main>
+    <article class="text-white">
+      <PostRenderer content={content} slot="content" />
+    </article>
+  </main>
+</Layout>
