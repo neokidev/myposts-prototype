@@ -1,0 +1,34 @@
+---
+import { parseAndTransform } from "../../lib/markdoc/read";
+import Renderer from "../../components/Renderer.astro";
+import ContentLayout from "../../layouts/ContentLayout.astro";
+import { getPost, getPosts } from "src/lib/posts";
+
+export async function getStaticPaths() {
+  const posts = await getPosts()
+  const filteredPosts = posts?.filter((p) => p.is_draft !== true)
+  return filteredPosts?.map((p) => ({
+    params: {
+      id: p.id,
+    },
+  }))
+}
+
+const { id } = Astro.params;
+const post = await getPost(id!)
+const { title, content, published_at, created_at } = post!
+const transformedContent = await parseAndTransform(content || '')
+const publishedDate = new Date(published_at || created_at!)
+---
+
+<ContentLayout title={title} date={publishedDate}>
+  <!-- <BlogPostMeta
+    title={frontmatter.title}
+    description={frontmatter.external ? undefined : frontmatter.description}
+    publishDate={frontmatter.date.toISOString()}
+    pagePath={`/blog/${slug}`}
+    ogImageAbsoluteUrl={ogImageAbsoluteUrl}
+    slot="meta"
+  /> -->
+  <Renderer content={transformedContent} slot="content" />
+</ContentLayout>
